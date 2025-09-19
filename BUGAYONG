@@ -1,0 +1,118 @@
+using System;
+
+class Activity5{
+    
+    public static void Main(string[] args){
+        
+        bool isRunning = true;
+        string [,] login = {{"admin","Admin123"},{"appsdev","AppsDev123"},{"barry","Philip"}};
+        int attempt = 3;
+        string token = null;
+        bool valid = false;
+        string paragraph = "But if I ever fall in love again. Sometimes when this broken heart can mend. I know it's gonna be with you. You're the one to pull me through. Though I don't know when. If I ever fall in love again";
+        
+        while(isRunning){
+            Console.WriteLine("Welcome! Choose an option:");
+            invalidChoice:
+            Console.WriteLine("1. Login");
+            Console.WriteLine("2. Global Check (String Exercises)");
+            Console.WriteLine("3. Authorization Check");
+            Console.WriteLine("4. Logout");
+            Console.Write("Enter your choice: ");
+            string choice = Console.ReadLine();
+
+            switch(choice){
+                case "1":
+                    if(valid){
+                        Console.WriteLine("\nYou are already logged in!\n");
+                        break;
+                    }
+                    pleaseLogin:
+                    Console.Write("\nEnter Username: ");
+                    string user = Console.ReadLine();
+                    Console.Write("Enter Password: ");
+                    string pass = Console.ReadLine();
+
+                    for(int i = 0; i < login.GetLength(0); i++){
+                        if (login[i, 0].Equals(user.ToLower()) && login[i, 1].Equals(pass)){
+                            valid = true;
+                            char[] passArr = pass.ToCharArray();
+                            Array.Reverse(passArr);
+                            token = string.Concat(new string(passArr),user).ToLower();
+                            Console.WriteLine("Login Successful!");
+                            Console.WriteLine("Generated Token: " + token + "\n");
+                            attempt = 3;
+                            break;
+                        }
+                    }
+                    if(!valid){
+                        attempt--;
+                        if(attempt == 0){
+                            Console.WriteLine("\nInvalid credentials. You are locked out.\n");
+                            isRunning = false;
+                        }else{
+                            Console.WriteLine("\nInvalid credentials. You only have " + attempt + " remaining attempts.\n");
+                            goto pleaseLogin;
+                        }
+                    }
+                break;
+                case "2":
+                        Console.WriteLine("\nWelcome to the Global Check!");
+                        invalidSelect:
+                        Console.WriteLine("Choose an activity:");
+                        Console.WriteLine("1. Reverse a sentence");
+                        Console.WriteLine("2. Search for a word in a paragraph");
+                        Console.WriteLine("3. Go back to the main menu");
+                        Console.Write("\nEnter your choice: ");
+                        string select = Console.ReadLine();
+                    
+                        switch(select){
+                            case "1":
+                                Console.Write("Enter a sentence: ");
+                                string sentence = Console.ReadLine();
+                                char [] sentenceArr = sentence.ToCharArray();
+                                Array.Reverse(sentenceArr);
+                                Console.WriteLine("\nReversed Sentence: " + new string(sentenceArr));
+                                Console.WriteLine("\nThank you for using Global Check!\n");
+                            break;
+                            case "2":
+                                Console.WriteLine("Paragraph: " + paragraph);
+                                Console.Write("Enter a word: ");
+                                string word = Console.ReadLine();
+                                if(paragraph.ToLower().Contains(word.ToLower())){
+                                    Console.WriteLine("The word " + word + " is in the paragraph.");
+                                }else{
+                                    Console.WriteLine("The word " + word + " is not in the paragraph.");
+                                }
+                                Console.WriteLine("\nThank you for using Global Check!\n");
+                            break;
+                            case "3":
+                                Console.WriteLine("\nReturning to the main menu...\n");
+                            break;
+                            default:
+                                Console.WriteLine("\nInvalid choice! Please try again.\n");
+                                goto invalidSelect;
+                        }
+                break;
+                case "3":
+                    if(token!=null){
+                        Console.WriteLine("\nYou're currently viewing this page as an authorized user.\n");
+                    }else{
+                       Console.WriteLine("\nUnauthorized view. Please log in to access this page.\n");
+                       goto pleaseLogin;
+                    }
+                break;
+                case "4":
+                    valid = false;
+                    token = null;
+                    attempt = 3;
+                    Console.WriteLine("\nLogging out...");
+                    Console.WriteLine("Token cleared.\n");
+                break;
+                default:
+                    Console.WriteLine("\nInvalid choice! Please try again.\n");
+                    goto invalidChoice;
+            }
+        }
+    }
+}
